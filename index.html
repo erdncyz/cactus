@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>🌵</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -18,6 +18,7 @@
     justify-content: center;
     padding: 24px;
     overflow: hidden;
+    touch-action: manipulation;
   }
 
   .scene {
@@ -94,9 +95,16 @@
     box-shadow: 0 8px 24px -8px rgba(224,96,143,.5);
     transition: transform .15s ease, box-shadow .15s ease;
     letter-spacing: .3px;
+    touch-action: manipulation;
   }
   .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(224,96,143,.6); }
   .btn:active { transform: translateY(0) scale(.97); }
+  .btn:disabled {
+    opacity: .7;
+    cursor: default;
+    transform: none;
+    box-shadow: 0 8px 24px -8px rgba(224,96,143,.35);
+  }
 
   .hint {
     margin-top: 14px;
@@ -214,6 +222,8 @@
 
   let count = parseInt(localStorage.getItem('waterCount') || '0', 10);
   const NEEDED = 4;
+  let resetArmed = count >= NEEDED;
+  let resetArmTimer;
 
   const growingMsgs = [
     'biraz daha su...',
@@ -225,11 +235,25 @@
   function render() {
     if (count >= NEEDED) {
       bloom.classList.add('open');
-      hint.textContent = 'çiçek açtı 🌸 her gün uğra, solmasın!';
-      btn.textContent = '💧 Tekrar su ver';
+      hint.textContent = 'çiçek açtı 🌸';
+      btn.textContent = '↺ Başa dön';
+      btn.disabled = !resetArmed;
     } else {
+      bloom.classList.remove('open');
       hint.textContent = growingMsgs[Math.min(count, growingMsgs.length - 1)];
+      btn.textContent = '💧 Su ver';
+      btn.disabled = false;
     }
+  }
+
+  function armResetSoon() {
+    clearTimeout(resetArmTimer);
+    resetArmed = false;
+    render();
+    resetArmTimer = setTimeout(() => {
+      resetArmed = true;
+      render();
+    }, 1000);
   }
 
   function rain() {
@@ -246,15 +270,28 @@
   }
 
   btn.addEventListener('click', () => {
-    count++;
+    if (count >= NEEDED) {
+      if (!resetArmed) return;
+      count = 0;
+      resetArmed = false;
+      clearTimeout(resetArmTimer);
+      localStorage.setItem('waterCount', count);
+      bloom.style.transform = '';
+      render();
+      return;
+    }
+
+    count = Math.min(count + 1, NEEDED);
     localStorage.setItem('waterCount', count);
     rain();
-    // pop the bloom a little on each water once open
-    if (bloom.classList.contains('open')) {
-      bloom.style.transform = 'scale(1.18)';
-      setTimeout(() => bloom.style.transform = '', 250);
+    if (count === NEEDED) {
+      setTimeout(() => {
+        render();
+        armResetSoon();
+      }, 350);
+      return;
     }
-    setTimeout(render, count === NEEDED ? 350 : 0);
+    render();
   });
 
   render();
