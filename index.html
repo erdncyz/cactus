@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌵</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, #fbe6f0 0%, #f6e9f7 45%, #fdf3e7 100%);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+  }
+
+  .scene {
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 3 / 4;
+    position: relative;
+    user-select: none;
+  }
+
+  svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+  /* ground */
+  .hill { fill: #e8c9a8; }
+  .hill-2 { fill: #ddb892; }
+
+  /* cactus */
+  .cactus-body { fill: #6aa667; }
+  .cactus-shade { fill: #5b9159; }
+  .pot { fill: #d98e6a; }
+  .pot-rim { fill: #c97a56; }
+  .spine { stroke: #4f7d4d; stroke-width: 1.4; stroke-linecap: round; }
+
+  /* the bloom on the cactus */
+  .bloom {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform .7s cubic-bezier(.34,1.56,.64,1), opacity .5s ease;
+  }
+  .bloom.open { transform: scale(1); opacity: 1; }
+  .bloom .petal { fill: #f06fa8; }
+  .bloom .center { fill: #ffd23f; }
+
+  /* tulips sway gently */
+  .tulip { transform-box: fill-box; transform-origin: bottom center; animation: sway 4s ease-in-out infinite; }
+  .tulip:nth-child(2) { animation-delay: -1s; }
+  .tulip:nth-child(3) { animation-delay: -2s; }
+  .tulip:nth-child(4) { animation-delay: -3s; }
+  .tulip:nth-child(5) { animation-delay: -1.5s; }
+  @keyframes sway { 0%,100% { transform: rotate(-2.5deg);} 50% { transform: rotate(2.5deg);} }
+
+  .stem { stroke: #6aa667; stroke-width: 5; stroke-linecap: round; fill: none; }
+  .leaf { fill: #6aa667; }
+
+  /* watering can + drops */
+  .drop {
+    position: absolute;
+    width: 9px; height: 13px;
+    background: #6ec6f2;
+    border-radius: 0 60% 60% 60%;
+    transform: rotate(45deg);
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 0 6px rgba(110,198,242,.6);
+  }
+  @keyframes fall {
+    0% { opacity: 0; transform: rotate(45deg) translateY(-10px); }
+    15% { opacity: 1; }
+    100% { opacity: 0; transform: rotate(45deg) translateY(140px); }
+  }
+
+  .btn {
+    margin-top: 28px;
+    border: none;
+    background: #fff;
+    color: #e0608f;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 15px 40px;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px -8px rgba(224,96,143,.5);
+    transition: transform .15s ease, box-shadow .15s ease;
+    letter-spacing: .3px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(224,96,143,.6); }
+  .btn:active { transform: translateY(0) scale(.97); }
+
+  .hint {
+    margin-top: 14px;
+    color: #b88aa6;
+    font-size: 13px;
+    min-height: 18px;
+    transition: opacity .4s ease;
+  }
+
+  .heading {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .heading .for {
+    font-size: 13px;
+    color: #b88aa6;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .heading .name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e0608f;
+    margin-top: 2px;
+    letter-spacing: .3px;
+  }
+  .heading .sub {
+    font-size: 13px;
+    color: #c79ab6;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="heading">
+    <div class="for">Sadece sana özel</div>
+    <div class="name">Aysu Boztepe 🌷</div>
+    <div class="sub">su verdikçe çiçek açar, tıpkı sen gülümseyince ✨</div>
+  </div>
+
+  <div class="scene" id="scene">
+    <svg viewBox="0 0 300 400" aria-hidden="true">
+
+      <!-- ground -->
+      <path class="hill" d="M0 320 Q150 280 300 320 L300 400 L0 400 Z"/>
+      <path class="hill-2" d="M0 350 Q150 325 300 350 L300 400 L0 400 Z"/>
+
+      <!-- tulips -->
+      <g class="tulip">
+        <path class="stem" d="M55 350 L55 250"/>
+        <path class="leaf" d="M55 300 Q35 290 40 320 Q52 312 55 300 Z"/>
+        <path d="M55 250 C42 250 40 232 42 224 C46 234 50 230 55 224 C60 230 64 234 68 224 C70 232 68 250 55 250 Z" fill="#f06fa8"/>
+      </g>
+      <g class="tulip">
+        <path class="stem" d="M100 355 L100 240"/>
+        <path class="leaf" d="M100 305 Q122 295 116 325 Q104 316 100 305 Z"/>
+        <path d="M100 240 C87 240 85 222 87 214 C91 224 95 220 100 214 C105 220 109 224 113 214 C115 222 113 240 100 240 Z" fill="#f4a0c3"/>
+      </g>
+      <g class="tulip">
+        <path class="stem" d="M205 355 L205 238"/>
+        <path class="leaf" d="M205 302 Q183 292 189 322 Q201 314 205 302 Z"/>
+        <path d="M205 238 C192 238 190 220 192 212 C196 222 200 218 205 212 C210 218 214 222 218 212 C220 220 218 238 205 238 Z" fill="#e0608f"/>
+      </g>
+      <g class="tulip">
+        <path class="stem" d="M248 350 L248 252"/>
+        <path class="leaf" d="M248 304 Q268 294 263 322 Q251 314 248 304 Z"/>
+        <path d="M248 252 C235 252 233 234 235 226 C239 236 243 232 248 226 C253 232 257 236 261 226 C263 234 261 252 248 252 Z" fill="#f4a0c3"/>
+      </g>
+
+      <!-- cactus in pot (center) -->
+      <g>
+        <!-- arms -->
+        <path class="cactus-body" d="M150 330 C132 330 122 312 122 288 L122 262 C122 250 134 250 134 262 L134 292 C134 300 150 300 150 292 Z"/>
+        <path class="cactus-body" d="M150 330 C168 330 178 312 178 288 L178 268 C178 256 166 256 166 268 L166 292 C166 300 150 300 150 292 Z"/>
+        <!-- main body -->
+        <rect class="cactus-body" x="135" y="200" width="30" height="135" rx="15"/>
+        <rect class="cactus-shade" x="135" y="200" width="11" height="135" rx="5.5"/>
+        <!-- spines -->
+        <g class="spine">
+          <line x1="150" y1="218" x2="150" y2="210"/>
+          <line x1="150" y1="240" x2="150" y2="232"/>
+          <line x1="150" y1="262" x2="150" y2="254"/>
+          <line x1="150" y1="284" x2="150" y2="276"/>
+          <line x1="150" y1="306" x2="150" y2="298"/>
+        </g>
+
+        <!-- pot -->
+        <path class="pot" d="M122 332 L178 332 L172 388 L128 388 Z"/>
+        <rect class="pot-rim" x="116" y="324" width="68" height="14" rx="4"/>
+
+        <!-- the bloom -->
+        <g class="bloom" id="bloom">
+          <g transform="translate(150 196)">
+            <ellipse class="petal" cx="0" cy="-12" rx="8" ry="13"/>
+            <ellipse class="petal" cx="11" cy="-4" rx="8" ry="13" transform="rotate(72 11 -4)"/>
+            <ellipse class="petal" cx="7" cy="11" rx="8" ry="13" transform="rotate(144 7 11)"/>
+            <ellipse class="petal" cx="-7" cy="11" rx="8" ry="13" transform="rotate(216 -7 11)"/>
+            <ellipse class="petal" cx="-11" cy="-4" rx="8" ry="13" transform="rotate(288 -11 -4)"/>
+            <circle class="center" cx="0" cy="0" r="7"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <button class="btn" id="waterBtn">💧 Su ver</button>
+  <p class="hint" id="hint"></p>
+
+<script>
+  const scene = document.getElementById('scene');
+  const bloom = document.getElementById('bloom');
+  const btn = document.getElementById('waterBtn');
+  const hint = document.getElementById('hint');
+
+  let count = parseInt(localStorage.getItem('waterCount') || '0', 10);
+  const NEEDED = 4;
+
+  const growingMsgs = [
+    'biraz daha su...',
+    'neredeyse açıyor...',
+    'kaktüs seni seviyor 🌵',
+    'sabır güzel şeyler getirir 🌸',
+  ];
+
+  function render() {
+    if (count >= NEEDED) {
+      bloom.classList.add('open');
+      hint.textContent = 'çiçek açtı 🌸 her gün uğra, solmasın!';
+      btn.textContent = '💧 Tekrar su ver';
+    } else {
+      hint.textContent = growingMsgs[Math.min(count, growingMsgs.length - 1)];
+    }
+  }
+
+  function rain() {
+    for (let i = 0; i < 8; i++) {
+      const d = document.createElement('div');
+      d.className = 'drop';
+      d.style.left = (46 + Math.random() * 8) + '%';
+      d.style.top = '18%';
+      d.style.animation = 'fall 1s ease-in forwards';
+      d.style.animationDelay = (i * 0.07) + 's';
+      scene.appendChild(d);
+      setTimeout(() => d.remove(), 1200);
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    count++;
+    localStorage.setItem('waterCount', count);
+    rain();
+    // pop the bloom a little on each water once open
+    if (bloom.classList.contains('open')) {
+      bloom.style.transform = 'scale(1.18)';
+      setTimeout(() => bloom.style.transform = '', 250);
+    }
+    setTimeout(render, count === NEEDED ? 350 : 0);
+  });
+
+  render();
+</script>
+</body>
+</html>
